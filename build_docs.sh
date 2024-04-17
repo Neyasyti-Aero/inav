@@ -21,6 +21,7 @@ doc_files=(
 	'Buzzer.md'
 	'Sonar.md'
 	'Profiles.md'
+	'Modes.md'
 	'Inflight Adjustments.md'
 	'Controls.md'
 	'Gtune.md'
@@ -48,7 +49,7 @@ if which gimli >/dev/null; then
 	done
 	rm -f ${filename}.pdf
 	gimli -f ${filename}.md -stylesheet override.css \
-	  -w '--toc --title "INAV Manual" --footer-right "[page]" --toc-depth 1'
+	  -w '--toc --title "Cleanflight Manual" --footer-right "[page]" --toc-depth 1'
 	rm ${filename}.md
 	popd >/dev/null
 else

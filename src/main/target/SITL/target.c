@@ -342,6 +342,11 @@ void IOConfigGPIO(IO_t io, ioConfig_t cfg)
     UNUSED(cfg);
 }
 
+void systemClockSetup(uint8_t cpuUnderclock)
+{
+    UNUSED(cpuUnderclock);
+}
+
 void timerInit(void) {
     // NOP
 }

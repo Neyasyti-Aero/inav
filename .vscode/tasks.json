@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build AOCODARCH7DUAL",
+            "label": "Build Matek F722-SE",
             "type": "shell",
-            "command": "make AOCODARCH7DUAL",
+            "command": "make MATEKF722SE",
             "group": "build",
             "problemMatcher": [],
             "options": {
@@ -14,9 +14,9 @@
             }
         },
         {
-            "label": "Build AOCODARCH7DUAL",
+            "label": "Build Matek F722",
             "type": "shell",
-            "command": "make AOCODARCH7DUAL",
+            "command": "make MATEKF722",
             "group": {
                 "kind": "build",
                 "isDefault": true

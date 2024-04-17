@@ -1,7 +1,5 @@
 # Building with Vagrant
 
-> **On Windows building with this method is not advised and should be used only if Windows Linux Subsystem can not be used. In all other cases all Windows users should be using Linux Subsystem (WSL) instead**
-
 Setting up build environment with Vagrant is remarkably simple, but you still need to have some basic knowlage of your OS.
 
 ## Installing Vagrant

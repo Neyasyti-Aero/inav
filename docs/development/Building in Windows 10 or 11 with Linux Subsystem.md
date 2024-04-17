@@ -1,6 +1,6 @@
-# Building in Windows 10/11 with Linux subsystem (WSL) [Recommended]
+# Building in Windows 10 with Linux subsystem [Recommended]
 
-Linux subsystem for Windows (WSL) 10/11 is probably the simplest way of building INAV under Windows.
+Linux subsystem for Windows 10 is probably the simplest way of building INAV under Windows 10.
 
 ## Setting up the environment
 
@@ -8,6 +8,7 @@ Enable WSL:
 run `windows features`
 enable `windows subsytem for linux`
 reboot
+
 
 Install Ubuntu:
 1.  Go to Microsoft store https://www.microsoft.com/en-gb/store/b/home
@@ -55,12 +56,12 @@ You can fix this with by remounting the drive using the following commands
 1. `sudo umount /mnt/c`
 2. `sudo mount -t drvfs C: /mnt/c -o metadata`
 
-## Building with Make (example):
+## Building (example):
 
-For detailed build instructions see [Building in Linux](Building%20in%20Linux.md)
+For detailed build instrusctions see [Building in Linux](Building%20in%20Linux.md)
 
 Launch Ubuntu:
-Click Windows Start button then scroll and launch "Ubuntu"
+Click Windows Start button then scroll and lauch "Ubuntu"
 
 Building from Ubuntu command line
 
@@ -77,39 +78,6 @@ Then to build
 ```
 cd build
 make MATEKF722
-```
-
-## Building with Ninja (example):
-
-[Ninja](https://ninja-build.org/) is a popular cross-platform tool. It is both lightweight and executes parallel builds by default. It is advantageous to use this over the old _make_ method. There are detailed instructions for building with Ninja in [Building in Linux](Building%20in%20Linux.md#building-with-ninja).
-
-Launch Ubuntu:
-Click Windows Start button. Then scroll and launch **Ubuntu**.
-
-> [!TIP]
-> Before using Ninja, you will need to install it. From the Ubuntu command prompt type `sudo apt-get install ninja-build -y` and press enter.
-
-Building from the command line:
-
-First, change to the INAV directory with 
-```cd /mnt/c/inav```
-
-Before building, you will need to prepare the build environment. You only need to do this once, unless you reinstall WSL or cmake.
-
-```
-mkdir build
-cd build
-cmake -GNinja ..
-```
-
-From then on, you can build your target by calling the following from inside the build directory.
-```
-ninja MATEKF722
-```
-
-If you want to build multiple targets. You can use:
-```
-ninja MATEKF722 MATEKF405SE SPEEDYBEEF405
 ```
 
 ## Updating the documents
