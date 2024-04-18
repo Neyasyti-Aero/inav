@@ -150,6 +150,11 @@ void pgResetFn_serialConfig(serialConfig_t *serialConfig)
             uart1Config->functionMask = FUNCTION_MSP;
         }
     }
+#else
+	serialPortConfig_t * uart1Config = serialFindPortConfiguration(SERIAL_PORT_USART1);
+    if (uart1Config) {
+        uart1Config->functionMask = FUNCTION_MSP;
+	}
 #endif
 
     serialConfig->reboot_character = SETTING_REBOOT_CHARACTER_DEFAULT;
