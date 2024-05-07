@@ -17,41 +17,64 @@
 
 #pragma once
 
-#define TARGET_BOARD_IDENTIFIER "STZH"
+#define TARGET_BOARD_IDENTIFIER	"STZH"
 
-#define USBD_PRODUCT_STRING  "STRIZH"
+#define USBD_PRODUCT_STRING		"STRIZH"
 
 #define LED0                    PC14
 #define LED1                    PC15
 
-#define SENSORS_SET (SENSOR_ACC|SENSOR_GYRO)
+#define SENSORS_SET				(SENSOR_ACC|SENSOR_GYRO|SENSOR_MAG|SENSOR_BARO)
 
 // *************** Gyro & ACC **********************
 #define USE_SPI
 
 #define USE_SPI_DEVICE_1
-#define SPI1_SCK_PIN            PB4
-#define SPI1_MISO_PIN           PA5
-#define SPI1_MOSI_PIN           PA6
+#define SPI1_SCK_PIN            PB3
+#define SPI1_MISO_PIN           PB4
+#define SPI1_MOSI_PIN           PB5
 
-#define USE_IMU_BMI160
-#define IMU_BMI160_ALIGN        CW0_DEG
-#define BMI160_SPI_BUS          BUS_SPI1
-#define BMI160_CS_PIN			PF11
+
+#define USE_IMU_BMI088
+#define IMU_BMI088_ALIGN        CW0_DEG
+#define BMI088_SPI_BUS          BUS_SPI1
+#define BMI088_GYRO_CS_PIN      PF12
+#define BMI088_GYRO_EXTI_PIN    PG6
+#define BMI088_ACC_CS_PIN       PF13
+#define BMI088_ACC_EXTI_PIN     PG8
+
+
+#define USE_IMU_BMI270
+#define IMU_BMI270_ALIGN        CW0_DEG
+#define BMI270_CS_PIN           PF10
+#define BMI270_SPI_BUS          BUS_SPI1
+
 
 // *************** Mag *****************************
-/*
-#define USE_I2C
-#define USE_I2C_DEVICE_1
-#define I2C1_SCL                PB6
-#define I2C1_SDA                PB7
 
-#define DEFAULT_I2C_BUS         BUS_I2C1
+#define USE_I2C
+#define USE_I2C_DEVICE_2
+#define I2C2_SCL                PF1
+#define I2C2_SDA                PF0
+
+#define DEFAULT_I2C_BUS         BUS_I2C2
+#define EXTERNAL_I2C_BUS		BUS_I2C2
+#define MAG_I2C_BUS				BUS_I2C2
 
 #define USE_MAG
-#define MAG_I2C_BUS             BUS_I2C1
-#define USE_MAG_HMC5883*/
+#define USE_MAG_QMC5883
+#define QMC5883_I2C_BUS         BUS_I2C2
+#define USE_MAG_ALL
 
+// *************** Baro ****************************
+
+#define USE_BARO
+#define BARO_I2C_BUS			BUS_I2C2
+#define USE_BARO_ALL
+
+#define USE_BARO_BMP388
+#define BMP388_SPI_BUS			BUS_SPI1
+#define BMP388_CS_PIN			PF11
 
 // *************** UART ****************************
 /*#define USE_VCP
@@ -82,12 +105,12 @@
 
 // *************** ADC *****************************
 #define USE_ADC
-#define ADC_INSTANCE                ADC1
-#define ADC1_DMA_STREAM             DMA2_Stream0
-#define ADC_CHANNEL_1_PIN           PC5
-#define VBAT_ADC_CHANNEL            ADC_CHN_1
+#define ADC_INSTANCE			ADC1
+#define ADC1_DMA_STREAM			DMA2_Stream0
+#define ADC_CHANNEL_1_PIN		PC5
+#define VBAT_ADC_CHANNEL		ADC_CHN_1
 
-#define DEFAULT_FEATURES (FEATURE_VBAT | FEATURE_TELEMETRY)
+#define DEFAULT_FEATURES		(FEATURE_VBAT|FEATURE_TELEMETRY)
 
 #define TARGET_IO_PORTA         0xffff
 #define TARGET_IO_PORTB         0xffff
@@ -95,7 +118,8 @@
 #define TARGET_IO_PORTD         0xffff
 #define TARGET_IO_PORTE         0xffff
 #define TARGET_IO_PORTF         0xffff
+#define TARGET_IO_PORTG         0xffff
 
 #define USE_ESC_SENSOR
 
-#define MAX_PWM_OUTPUT_PORTS       13
+#define MAX_PWM_OUTPUT_PORTS	13
