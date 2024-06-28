@@ -101,14 +101,20 @@
 
 #define SERIAL_PORT_COUNT       6
 
+// *************** OSD *****************************
+
+#define USE_OSD
+#define USE_MAX7456
+#define MAX7456_SPI_BUS      BUS_SPI1
+#define MAX7456_CS_PIN       PA15
+
 // *************** ADC *****************************
 #define USE_ADC
-#define ADC_INSTANCE			ADC1
-#define ADC1_DMA_STREAM			DMA2_Stream0
-#define ADC_CHANNEL_1_PIN		PC5
+#define ADC_INSTANCE            ADC3
+#define ADC_CHANNEL_1_PIN		PF5
 #define VBAT_ADC_CHANNEL		ADC_CHN_1
 
-#define DEFAULT_FEATURES		(FEATURE_VBAT|FEATURE_TELEMETRY)
+#define DEFAULT_FEATURES		(FEATURE_VBAT|FEATURE_TELEMETRY|FEATURE_OSD)
 
 #define TARGET_IO_PORTA         0xffff
 #define TARGET_IO_PORTB         0xffff
