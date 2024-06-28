@@ -27,19 +27,19 @@
 #include "drivers/sensor.h"
 
 timerHardware_t timerHardware[] = {
-    DEF_TIM(TIM4, CH2, PD13, TIM_USE_OUTPUT_AUTO, 0, 0), // S1 (works as Motor output in airplane with tail)
-    DEF_TIM(TIM4, CH1, PD12, TIM_USE_OUTPUT_AUTO, 0, 0), // S2 (doesn't work for some reason, always 0)
+    DEF_TIM(TIM4, CH2, PD13, TIM_USE_OUTPUT_AUTO, 0, 0), // S1 (works as Motor1 output in airplane with tail)
+    DEF_TIM(TIM4, CH1, PD12, TIM_USE_OUTPUT_AUTO, 0, 0), // S2 (works as Motor2 output in airplane with tail)
     DEF_TIM(TIM3, CH2, PA7,  TIM_USE_OUTPUT_AUTO, 0, 0), // S3 (works as Servo 1 in airplane with tail for some reason)
-    DEF_TIM(TIM5, CH2, PA1,  TIM_USE_OUTPUT_AUTO, 0, 0), // S4 (doesn't work for some reason, always 0)
+    DEF_TIM(TIM2, CH2, PA1,  TIM_USE_OUTPUT_AUTO, 0, 0), // S4 (doesn't work for some reason, always 0)
     DEF_TIM(TIM8, CH4, PC9,  TIM_USE_OUTPUT_AUTO, 0, 0), // S5 (works as Servo 3 in airplane with tail for some reason)
-    DEF_TIM(TIM3, CH4, PB1,  TIM_USE_OUTPUT_AUTO, 0, 0), // S6 (doesn't work for some reason, always 0)
-    DEF_TIM(TIM8, CH2, PB0,  TIM_USE_OUTPUT_AUTO, 0, 1), // S7
-    DEF_TIM(TIM8, CH1, PA5,  TIM_USE_OUTPUT_AUTO, 0, 0), // S8
-    DEF_TIM(TIM2, CH1, PB8,  TIM_USE_OUTPUT_AUTO, 0, 0), // S9
-    DEF_TIM(TIM1, CH4, PE14, TIM_USE_OUTPUT_AUTO, 0, 0), // S10
-    DEF_TIM(TIM1, CH3, PE13, TIM_USE_OUTPUT_AUTO, 0, 0), // S11
-    DEF_TIM(TIM1, CH2, PE11, TIM_USE_OUTPUT_AUTO, 0, 1), // S12
-    DEF_TIM(TIM1, CH1, PE9,  TIM_USE_OUTPUT_AUTO, 0, 2), // S13
+    DEF_TIM(TIM3, CH4, PB1,  TIM_USE_OUTPUT_AUTO, 0, 0), // S6 (works as Servo 4 in airplane with tail for some reason)
+    DEF_TIM(TIM3, CH3, PB0,  TIM_USE_OUTPUT_AUTO, 0, 0), // S7 (works as Servo 5 in airplane with tail for some reason)
+    DEF_TIM(TIM2, CH1, PA5,  TIM_USE_OUTPUT_AUTO, 0, 0), // S8 (works as Servo 6 in airplane with tail for some reason)
+    DEF_TIM(TIM10, CH1, PB8,  TIM_USE_OUTPUT_AUTO, 0, 0), // S9 (works as Servo 7 in airplane with tail for some reason)
+    DEF_TIM(TIM1, CH4, PE14, TIM_USE_OUTPUT_AUTO, 0, 0), // S10 (doesn't work for some reason, always 0)
+    DEF_TIM(TIM1, CH3, PE13, TIM_USE_OUTPUT_AUTO, 0, 0), // S11 (works as Servo 9)
+    DEF_TIM(TIM1, CH2, PE11, TIM_USE_OUTPUT_AUTO, 0, 1), // S12 (works as Servo 10)
+    DEF_TIM(TIM1, CH1, PE9,  TIM_USE_OUTPUT_AUTO, 0, 2), // S13 (works as Servo 11)
 };
 
 const int timerHardwareCount = sizeof(timerHardware) / sizeof(timerHardware[0]);

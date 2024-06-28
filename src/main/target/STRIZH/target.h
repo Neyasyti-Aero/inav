@@ -77,9 +77,7 @@
 #define BMP388_CS_PIN			PF11
 
 // *************** UART ****************************
-/*#define USE_VCP
-#define VBUS_SENSING_PIN        PA9
-#define VBUS_SENSING_ENABLED*/
+#define USE_VCP
 
 #define USE_UART1
 #define UART1_RX_PIN            PB7
@@ -101,7 +99,7 @@
 #define UART5_RX_PIN            PD2
 #define UART5_TX_PIN            PC12
 
-#define SERIAL_PORT_COUNT       5
+#define SERIAL_PORT_COUNT       6
 
 // *************** ADC *****************************
 #define USE_ADC
