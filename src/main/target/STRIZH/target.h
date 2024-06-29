@@ -99,7 +99,11 @@
 #define UART5_RX_PIN            PD2
 #define UART5_TX_PIN            PC12
 
-#define SERIAL_PORT_COUNT       6
+#define USE_UART6
+#define UART6_RX_PIN            PG9
+#define UART6_TX_PIN            PG14
+
+#define SERIAL_PORT_COUNT       7
 
 // *************** OSD *****************************
 
@@ -111,10 +115,16 @@
 // *************** ADC *****************************
 #define USE_ADC
 #define ADC_INSTANCE            ADC3
-#define ADC_CHANNEL_1_PIN		PF5
-#define VBAT_ADC_CHANNEL		ADC_CHN_1
 
-#define DEFAULT_FEATURES		(FEATURE_VBAT|FEATURE_TELEMETRY|FEATURE_OSD)
+#define ADC_CHANNEL_1_PIN		PF5
+#define ADC_CHANNEL_2_PIN       PF4
+#define VBAT_ADC_CHANNEL		ADC_CHN_1
+#define CURRENT_METER_ADC_CHANNEL ADC_CHN_2
+
+#define VBAT_SCALE_DEFAULT      1100
+#define CURRENT_METER_SCALE     5
+
+#define DEFAULT_FEATURES		(FEATURE_VBAT|FEATURE_TELEMETRY|FEATURE_CURRENT_METER/*|FEATURE_OSD*/)
 
 #define TARGET_IO_PORTA         0xffff
 #define TARGET_IO_PORTB         0xffff
@@ -123,7 +133,5 @@
 #define TARGET_IO_PORTE         0xffff
 #define TARGET_IO_PORTF         0xffff
 #define TARGET_IO_PORTG         0xffff
-
-#define USE_ESC_SENSOR
 
 #define MAX_PWM_OUTPUT_PORTS	13

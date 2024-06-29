@@ -20,7 +20,9 @@
 #include "drivers/io_types.h"
 #include "rcc_types.h"
 
-#if defined(STM32F4) || defined(STM32F7) || defined(AT32F43x) 
+#if defined(STM32F4)
+#define ADC_TAG_MAP_COUNT 24
+#elif defined(STM32F7) || defined(AT32F43x) 
 #define ADC_TAG_MAP_COUNT 16
 #elif defined(STM32H7)
 #define ADC_TAG_MAP_COUNT 28

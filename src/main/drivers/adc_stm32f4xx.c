@@ -36,14 +36,23 @@
 #define ADC1_DMA_STREAM DMA2_Stream0
 #endif
 
+#if !defined(ADC2_DMA_STREAM)
+#define ADC2_DMA_STREAM DMA2_Stream1
+#endif
+
+#if !defined(ADC3_DMA_STREAM)
+#define ADC3_DMA_STREAM DMA2_Stream0
+#endif
+
 static adcDevice_t adcHardware[ADCDEV_COUNT] = {
     { .ADCx = ADC1, .rccADC = RCC_APB2(ADC1), .rccDMA = RCC_AHB1(DMA2), .DMAy_Streamx = ADC1_DMA_STREAM, .channel = DMA_Channel_0, .enabled = false, .usedChannelCount = 0 },
-    //{ .ADCx = ADC2, .rccADC = RCC_APB2(ADC2), .rccDMA = RCC_AHB1(DMA2), .DMAy_Streamx = DMA2_Stream1, .channel = DMA_Channel_0, .enabled = false, .usedChannelCount = 0 }
+    { .ADCx = ADC2, .rccADC = RCC_APB2(ADC2), .rccDMA = RCC_AHB1(DMA2), .DMAy_Streamx = ADC2_DMA_STREAM, .channel = DMA_Channel_1, .enabled = false, .usedChannelCount = 0 },
+    { .ADCx = ADC3, .rccADC = RCC_APB2(ADC3), .rccDMA = RCC_AHB1(DMA2), .DMAy_Streamx = ADC3_DMA_STREAM, .channel = DMA_Channel_2, .enabled = false, .usedChannelCount = 0 }
 };
 
 /* note these could be packed up for saving space */
 const adcTagMap_t adcTagMap[] = {
-/*
+
     { DEFIO_TAG_E__PF3,  ADC_Channel_9  },
     { DEFIO_TAG_E__PF4,  ADC_Channel_14 },
     { DEFIO_TAG_E__PF5,  ADC_Channel_15 },
@@ -52,7 +61,7 @@ const adcTagMap_t adcTagMap[] = {
     { DEFIO_TAG_E__PF8,  ADC_Channel_6  },
     { DEFIO_TAG_E__PF9,  ADC_Channel_7  },
     { DEFIO_TAG_E__PF10, ADC_Channel_8  },
-*/
+
     { DEFIO_TAG_E__PC0, ADC_Channel_10 },
     { DEFIO_TAG_E__PC1, ADC_Channel_11 },
     { DEFIO_TAG_E__PC2, ADC_Channel_12 },
@@ -75,10 +84,13 @@ ADCDevice adcDeviceByInstance(ADC_TypeDef *instance)
 {
     if (instance == ADC1)
         return ADCDEV_1;
-/*
-    if (instance == ADC2) // TODO add ADC2 and 3
+
+    if (instance == ADC2)
         return ADCDEV_2;
-*/
+
+    if (instance == ADC3)
+        return ADCDEV_3;
+
     return ADCINVALID;
 }
 static void adcInstanceInit(ADCDevice adcDevice)
