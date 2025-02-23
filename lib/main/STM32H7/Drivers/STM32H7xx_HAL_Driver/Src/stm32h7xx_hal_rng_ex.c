@@ -11,12 +11,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -28,7 +29,7 @@
   * @{
   */
 
-#if defined(RNG)
+#if defined (RNG)
 
 /** @addtogroup RNGEx
   * @brief RNG Extended HAL module driver.
@@ -36,25 +37,25 @@
   */
 
 #ifdef HAL_RNG_MODULE_ENABLED
-#if defined(RNG_CR_CONDRST)
+#if defined (RNG_CR_CONDRST)
 /* Private types -------------------------------------------------------------*/
 /* Private defines -----------------------------------------------------------*/
-/** @defgroup RNG_Ex_Private_Defines RNGEx Private Defines
+/** @defgroup RNGEx_Private_Defines
   * @{
   */
 /*  Health test control register information to use in CCM algorithm */
-#define RNG_HTCFG_1   0x17590ABCU /*!< Magic number */
+#define RNG_HTCFG_1   0x17590ABCU /*!< magic number */
 #if defined(RNG_VER_3_1) || defined(RNG_VER_3_0)
-#define RNG_HTCFG     0x000CAA74U /*!< Recommended value for NIST compliance, refer to application note AN4230 */
-#else /* RNG_VER_3_2 */
-#define RNG_HTCFG     0x00007274U /*!< Recommended value for NIST compliance, refer to application note AN4230 */
-#endif /* RNG_VER_3_1 || RNG_VER_3_0 */
+#define RNG_HTCFG     0x000CAA74U /*!< for best latency and To be compliant with NIST */
+#else /*RNG_VER_3_2*/
+#define RNG_HTCFG     0x00007274U /*!< for best latency and To be compliant with NIST */
+#endif
 /**
   * @}
   */
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
-/** @addtogroup RNGEx_Private_Constants
+/** @defgroup RNGEx_Private_Constants RNG Private Constants
   * @{
   */
 #define RNG_TIMEOUT_VALUE     2U
@@ -63,16 +64,16 @@
   */
 /* Private macros ------------------------------------------------------------*/
 /* Private functions prototypes ----------------------------------------------*/
-/* Private functions  --------------------------------------------------------*/
+/* Private functions ---------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 
-/** @defgroup RNGEx_Exported_Functions RNGEx Exported Functions
+/** @addtogroup RNGEx_Exported_Functions
   * @{
   */
 
-/** @defgroup RNGEx_Exported_Functions_Group1 Configuration and lock functions
-  *  @brief   Configuration functions
-  *
+/** @addtogroup RNGEx_Exported_Functions_Group1
+ *  @brief   Configuration functions
+ *
 @verbatim
  ===============================================================================
           ##### Configuration and lock functions #####
@@ -90,12 +91,12 @@
   *         RNG_ConfigTypeDef.
   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
   *          the configuration information for RNG.
-  * @param  pConf pointer to a RNG_ConfigTypeDef structure that contains
+  * @param  pConf: pointer to a RNG_ConfigTypeDef structure that contains
   *         the configuration information for RNG module
 
   * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_RNGEx_SetConfig(RNG_HandleTypeDef *hrng, const RNG_ConfigTypeDef *pConf)
+*/
+HAL_StatusTypeDef HAL_RNGEx_SetConfig(RNG_HandleTypeDef *hrng, RNG_ConfigTypeDef *pConf)
 {
   uint32_t tickstart;
   uint32_t cr_value;
@@ -141,11 +142,11 @@ HAL_StatusTypeDef HAL_RNGEx_SetConfig(RNG_HandleTypeDef *hrng, const RNG_ConfigT
 #if defined(RNG_VER_3_2) || defined(RNG_VER_3_1) || defined(RNG_VER_3_0)
     /*!< magic number must be written immediately before to RNG_HTCRG */
     WRITE_REG(hrng->Instance->HTCR, RNG_HTCFG_1);
-    /* Recommended value for NIST compliance, refer to application note AN4230 */
+    /* for best latency and to be compliant with NIST */
     WRITE_REG(hrng->Instance->HTCR, RNG_HTCFG);
-#endif /* RNG_VER_3_2 || RNG_VER_3_1 || RNG_VER_3_0 */
+#endif
 
-    /* Writing bit CONDRST=0*/
+    /* Writing bits CONDRST=0*/
     CLEAR_BIT(hrng->Instance->CR, RNG_CR_CONDRST);
     /* Get tick */
     tickstart = HAL_GetTick();
@@ -155,13 +156,9 @@ HAL_StatusTypeDef HAL_RNGEx_SetConfig(RNG_HandleTypeDef *hrng, const RNG_ConfigT
     {
       if ((HAL_GetTick() - tickstart) > RNG_TIMEOUT_VALUE)
       {
-        /* New check to avoid false timeout detection in case of prememption */
-        if (HAL_IS_BIT_SET(hrng->Instance->CR, RNG_CR_CONDRST))
-        {
-          hrng->State = HAL_RNG_STATE_READY;
-          hrng->ErrorCode = HAL_RNG_ERROR_TIMEOUT;
-          return HAL_ERROR;
-        }
+        hrng->State = HAL_RNG_STATE_READY;
+        hrng->ErrorCode = HAL_RNG_ERROR_TIMEOUT;
+        return HAL_ERROR;
       }
     }
 
@@ -189,11 +186,11 @@ HAL_StatusTypeDef HAL_RNGEx_SetConfig(RNG_HandleTypeDef *hrng, const RNG_ConfigT
   *         RNG_ConfigTypeDef.
   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
   *          the configuration information for RNG.
-  * @param  pConf pointer to a RNG_ConfigTypeDef structure that contains
+  * @param  pConf: pointer to a RNG_ConfigTypeDef structure that contains
   *         the configuration information for RNG module
 
   * @retval HAL status
-  */
+*/
 HAL_StatusTypeDef HAL_RNGEx_GetConfig(RNG_HandleTypeDef *hrng, RNG_ConfigTypeDef *pConf)
 {
 
@@ -237,12 +234,12 @@ HAL_StatusTypeDef HAL_RNGEx_GetConfig(RNG_HandleTypeDef *hrng, RNG_ConfigTypeDef
 /**
   * @brief  RNG current configuration lock.
   * @note   This function allows to lock RNG peripheral configuration.
-  *         Once locked, HW RNG reset has to be performed prior any further
+  *         Once locked, HW RNG reset has to be perfomed prior any further
   *         configuration update.
   * @param  hrng pointer to a RNG_HandleTypeDef structure that contains
   *                the configuration information for RNG.
   * @retval HAL status
-  */
+*/
 HAL_StatusTypeDef HAL_RNGEx_LockConfig(RNG_HandleTypeDef *hrng)
 {
   HAL_StatusTypeDef status;
@@ -283,68 +280,11 @@ HAL_StatusTypeDef HAL_RNGEx_LockConfig(RNG_HandleTypeDef *hrng)
   * @}
   */
 
-/** @defgroup RNGEx_Exported_Functions_Group2 Recover from seed error function
-  *  @brief   Recover from seed error function
-  *
-@verbatim
- ===============================================================================
-          ##### Recover from seed error function #####
- ===============================================================================
-    [..]  This section provide function allowing to:
-      (+) Recover from a seed error
-
-@endverbatim
-  * @{
-  */
-
-/**
-  * @brief  RNG sequence to recover from a seed error
-  * @param  hrng: pointer to a RNG_HandleTypeDef structure.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_RNGEx_RecoverSeedError(RNG_HandleTypeDef *hrng)
-{
-  HAL_StatusTypeDef status;
-
-  /* Check the RNG handle allocation */
-  if (hrng == NULL)
-  {
-    return HAL_ERROR;
-  }
-
-  /* Check RNG peripheral state */
-  if (hrng->State == HAL_RNG_STATE_READY)
-  {
-    /* Change RNG peripheral state */
-    hrng->State = HAL_RNG_STATE_BUSY;
-
-    /* sequence to fully recover from a seed error */
-    status = RNG_RecoverSeedError(hrng);
-    if (status == HAL_ERROR)
-    {
-      /* Update the error code */
-      hrng->ErrorCode = HAL_RNG_ERROR_RECOVERSEED;
-    }
-  }
-  else
-  {
-    hrng->ErrorCode = HAL_RNG_ERROR_BUSY;
-    status = HAL_ERROR;
-  }
-
-  /* Return the function status */
-  return status;
-}
-
 /**
   * @}
   */
 
-/**
-  * @}
-  */
-
-#endif /* RNG_CR_CONDRST */
+#endif  /* CONDRST */
 #endif /* HAL_RNG_MODULE_ENABLED */
 /**
   * @}
@@ -356,3 +296,4 @@ HAL_StatusTypeDef HAL_RNGEx_RecoverSeedError(RNG_HandleTypeDef *hrng)
   * @}
   */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

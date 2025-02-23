@@ -6,15 +6,16 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
-  */
+  */ 
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef STM32H7xx_LL_DLYB_H
@@ -56,14 +57,10 @@
 
 /**
   * @}
-  */
-
-/** @addtogroup DelayBlock_LL_Exported_Functions
-  * @{
-  */
+  */ 
  
 /* Peripheral Control functions  ************************************************/
-/** @addtogroup HAL_DELAY_LL_Group1
+/** @addtogroup HAL_DELAYBLOCK_LL_Group3 Delay Block functions
   * @{
   */
 HAL_StatusTypeDef DelayBlock_Enable(DLYB_TypeDef *DLYBx);
@@ -74,10 +71,7 @@ HAL_StatusTypeDef DelayBlock_Configure(DLYB_TypeDef *DLYBx, uint32_t PhaseSel, u
   * @}
   */
   
-/**
-  * @}
-  */
-   
+  
 /**
   * @}
   */
@@ -91,3 +85,4 @@ HAL_StatusTypeDef DelayBlock_Configure(DLYB_TypeDef *DLYBx, uint32_t PhaseSel, u
 
 #endif /* STM32H7xx_LL_DLYB_H */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

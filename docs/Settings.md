@@ -1334,7 +1334,7 @@ Defines error rate (in percents of max rate) when Iterm Lock is engaged when sti
 
 ### fw_iterm_lock_rate_threshold
 
-Defines the steepness of the attenuation curve. Higher values result in flatter attenuation. Lower values force full attenuation with lower stick deflection
+Defines rate percentage when full P I and D attenuation should happen. 100 disables Iterm Lock for P and D term
 
 | Default | Min | Max |
 | --- | --- | --- |
@@ -1344,7 +1344,7 @@ Defines the steepness of the attenuation curve. Higher values result in flatter 
 
 ### fw_iterm_lock_time_max_ms
 
-Defines max time in milliseconds for how long ITerm Lock will depress Iterm after sticks are release
+Defines max time in milliseconds for how long ITerm Lock will shut down Iterm after sticks are release
 
 | Default | Min | Max |
 | --- | --- | --- |
@@ -3434,7 +3434,7 @@ Launch throttle - throttle to be set during launch sequence (pwm units)
 
 ### nav_fw_launch_timeout
 
-Maximum time for launch sequence to continue after throwing. After this time LAUNCH mode will end and regular flight mode will take over (ms)
+Maximum time for launch sequence to be executed. After this time LAUNCH mode will be turned off and regular flight mode will take over (ms)
 
 | Default | Min | Max |
 | --- | --- | --- |

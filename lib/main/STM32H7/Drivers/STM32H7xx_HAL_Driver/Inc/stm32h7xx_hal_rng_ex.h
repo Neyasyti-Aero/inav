@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -31,8 +32,8 @@ extern "C" {
   * @{
   */
 
-#if defined(RNG)
-#if defined(RNG_CR_CONDRST)
+#if defined (RNG)
+#if defined (RNG_CR_CONDRST)
 
 /** @defgroup RNGEx RNGEx
   * @brief RNG Extension HAL module driver
@@ -46,7 +47,7 @@ extern "C" {
   */
 
 /**
-  * @brief RNGEx Configuration Structure definition
+  * @brief RNGEX Configuration Structure definition
   */
 
 typedef struct
@@ -55,9 +56,9 @@ typedef struct
   uint32_t        Config2;           /*!< Config2 must be a value between 0 and 0x7 */
   uint32_t        Config3;           /*!< Config3 must be a value between 0 and 0xF */
   uint32_t        ClockDivider;      /*!< Clock Divider factor.This parameter can
-                                          be a value of @ref RNGEx_Clock_Divider_Factor   */
+                                          be a value of @ref RNGEX_Clock_Divider_Factor   */
   uint32_t        NistCompliance;    /*!< NIST compliance.This parameter can be a
-                                          value of @ref RNGEx_NIST_Compliance   */
+                                          value of @ref RNGEX_NIST_Compliance   */
 } RNG_ConfigTypeDef;
 
 /**
@@ -65,12 +66,12 @@ typedef struct
   */
 
 /* Exported constants --------------------------------------------------------*/
-/** @defgroup RNGEx_Exported_Constants RNGEx Exported Constants
+/** @defgroup RNGEX_Exported_Constants RNGEX Exported Constants
   * @{
   */
 
-/** @defgroup RNGEx_Clock_Divider_Factor  Value used to configure an internal
-  *            programmable divider acting on the incoming RNG clock
+/** @defgroup RNGEX_Clock_Divider_Factor  Value used to configure an internal
+ *            programmable divider acting on the incoming RNG clock
   * @{
   */
 #define RNG_CLKDIV_BY_1       (0x00000000UL)      /*!< No clock division  */
@@ -108,7 +109,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup RNGEx_NIST_Compliance  NIST Compliance configuration
+/** @defgroup RNGEX_NIST_Compliance  NIST Compliance configuration
   * @{
   */
 #define RNG_NIST_COMPLIANT     (0x00000000UL) /*!< NIST compliant configuration*/
@@ -183,8 +184,8 @@ typedef struct
 
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /* Private functions ---------------------------------------------------------*/
 /** @defgroup RNGEx_Private_Functions RNGEx Private Functions
@@ -196,14 +197,14 @@ typedef struct
   */
 
 /* Exported functions --------------------------------------------------------*/
-/** @addtogroup RNGEx_Exported_Functions
+/** @defgroup RNGEx_Exported_Functions RNGEx Exported Functions
   * @{
   */
 
 /** @addtogroup RNGEx_Exported_Functions_Group1
   * @{
   */
-HAL_StatusTypeDef HAL_RNGEx_SetConfig(RNG_HandleTypeDef *hrng, const RNG_ConfigTypeDef *pConf);
+HAL_StatusTypeDef HAL_RNGEx_SetConfig(RNG_HandleTypeDef *hrng, RNG_ConfigTypeDef *pConf);
 HAL_StatusTypeDef HAL_RNGEx_GetConfig(RNG_HandleTypeDef *hrng, RNG_ConfigTypeDef *pConf);
 HAL_StatusTypeDef HAL_RNGEx_LockConfig(RNG_HandleTypeDef *hrng);
 
@@ -211,11 +212,6 @@ HAL_StatusTypeDef HAL_RNGEx_LockConfig(RNG_HandleTypeDef *hrng);
   * @}
   */
 
-/** @addtogroup RNGEx_Exported_Functions_Group2
-  * @{
-  */
-HAL_StatusTypeDef HAL_RNGEx_RecoverSeedError(RNG_HandleTypeDef *hrng);
-
 /**
   * @}
   */
@@ -228,11 +224,7 @@ HAL_StatusTypeDef HAL_RNGEx_RecoverSeedError(RNG_HandleTypeDef *hrng);
   * @}
   */
 
-/**
-  * @}
-  */
-
-#endif /* RNG_CR_CONDRST */
+#endif  /* CONDRST */
 #endif /* RNG */
 
 /**
@@ -244,5 +236,6 @@ HAL_StatusTypeDef HAL_RNGEx_RecoverSeedError(RNG_HandleTypeDef *hrng);
 #endif
 
 
-#endif /* STM32H7xx_HAL_RNG_EX_H */
+#endif /* STM32H7xx_HAL_RNGEX_H */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

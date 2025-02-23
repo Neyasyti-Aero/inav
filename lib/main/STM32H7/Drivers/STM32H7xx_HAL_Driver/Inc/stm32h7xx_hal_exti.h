@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -149,30 +150,22 @@ typedef struct
 #define EXTI_LINE_49                        (EXTI_CONFIG   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL     | 0x11U)
 #define EXTI_LINE_50                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL     | 0x12U)
 #define EXTI_LINE_51                        (EXTI_CONFIG   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL     | 0x13U)
-#if defined(LPTIM4)
+#if !defined(UART9)
 #define EXTI_LINE_52                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL     | 0x14U)
 #else
 #define EXTI_LINE_52                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL_CPU | 0x14U)
-#endif /*LPTIM4*/
-#if defined(LPTIM5)
+#endif /* UART9 */
+#if !defined(USART10)
 #define EXTI_LINE_53                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL     | 0x15U)
 #else
 #define EXTI_LINE_53                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL_CPU | 0x15U)
-#endif /*LPTIM5*/
+#endif /* USART10 */
 #define EXTI_LINE_54                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL_CPU | 0x16U)
 #define EXTI_LINE_55                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL_CPU | 0x17U)
 #define EXTI_LINE_56                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL_CPU | 0x18U)
-#if defined(EXTI_IMR2_IM57)
 #define EXTI_LINE_57                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL_CPU | 0x19U)
-#else
-#define EXTI_LINE_57                        (EXTI_RESERVED | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_NONE    | 0x19U)
-#endif /*EXTI_IMR2_IM57*/
 #define EXTI_LINE_58                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL_CPU | 0x1AU)
-#if defined(EXTI_IMR2_IM59)
 #define EXTI_LINE_59                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL_CPU | 0x1BU)
-#else
-#define EXTI_LINE_59                        (EXTI_RESERVED | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_NONE    | 0x1BU)
-#endif /*EXTI_IMR2_IM59*/
 #define EXTI_LINE_60                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL_CPU | 0x1CU)
 #define EXTI_LINE_61                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL_CPU | 0x1DU)
 #define EXTI_LINE_62                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG2 | EXTI_TARGET_MSK_ALL_CPU | 0x1EU)
@@ -209,12 +202,15 @@ typedef struct
 #define EXTI_LINE_79                        (EXTI_RESERVED | EXTI_EVENT | EXTI_REG3 | EXTI_TARGET_MSK_NONE| 0x0FU)
 #define EXTI_LINE_80                        (EXTI_RESERVED | EXTI_EVENT | EXTI_REG3 | EXTI_TARGET_MSK_NONE| 0x10U)
 #endif /* DUAL_CORE */
+
 #define EXTI_LINE_81                        (EXTI_RESERVED | EXTI_EVENT | EXTI_REG3 | EXTI_TARGET_MSK_NONE| 0x11U)
+
 #if defined (DUAL_CORE)
 #define EXTI_LINE_82                        (EXTI_CONFIG   | EXTI_EVENT | EXTI_REG3 | EXTI_TARGET_MSK_CPU2| 0x12U)
 #else
 #define EXTI_LINE_82                        (EXTI_RESERVED | EXTI_EVENT | EXTI_REG3 | EXTI_TARGET_MSK_NONE| 0x12U)
 #endif /* DUAL_CORE */
+
 #define EXTI_LINE_83                        (EXTI_RESERVED | EXTI_EVENT | EXTI_REG3 | EXTI_TARGET_MSK_NONE| 0x13U)
 #if defined (DUAL_CORE)
 #define EXTI_LINE_84                        (EXTI_CONFIG   | EXTI_EVENT | EXTI_REG3 | EXTI_TARGET_MSK_CPU1| 0x14U)
@@ -231,15 +227,6 @@ typedef struct
 #if defined(DTS)
 #define EXTI_LINE_88                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG3 | EXTI_TARGET_MSK_ALL | 0x18U)
 #endif /* DTS */
-#if defined(EXTI_IMR3_IM89)
-#define EXTI_LINE_89                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG3 | EXTI_TARGET_MSK_ALL_CPU | 0x19U)
-#endif /*EXTI_IMR3_IM89*/
-#if defined(EXTI_IMR3_IM90)
-#define EXTI_LINE_90                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG3 | EXTI_TARGET_MSK_ALL_CPU | 0x1AU)
-#endif /*EXTI_IMR3_IM90*/
-#if defined(I2C5)
-#define EXTI_LINE_91                        (EXTI_DIRECT   | EXTI_EVENT | EXTI_REG3 | EXTI_TARGET_MSK_ALL_CPU | 0x1BU)
-#endif /*I2C5*/
 
 /**
   * @}
@@ -284,9 +271,7 @@ typedef struct
 #define EXTI_GPIOF                          0x00000005U
 #define EXTI_GPIOG                          0x00000006U
 #define EXTI_GPIOH                          0x00000007U
-#if defined(GPIOI)
 #define EXTI_GPIOI                          0x00000008U
-#endif /*GPIOI*/
 #define EXTI_GPIOJ                          0x00000009U
 #define EXTI_GPIOK                          0x0000000AU
 
@@ -393,13 +378,11 @@ typedef struct
 /**
   * @brief  EXTI Line number
   */
-#if (STM32H7_DEV_ID == 0x483UL)
-#define EXTI_LINE_NB                        92UL
-#elif (STM32H7_DEV_ID == 0x480UL)
+#if defined (EXTI_LINE_88)
 #define EXTI_LINE_NB                        89UL
 #else
 #define EXTI_LINE_NB                        88UL
-#endif /* EXTI_LINE_91 */
+#endif /* EXTI_LINE_88 */
 
 /**
   * @}
@@ -409,36 +392,34 @@ typedef struct
 /** @defgroup EXTI_Private_Macros EXTI Private Macros
   * @{
   */
-#define IS_EXTI_PROPERTY(__EXTI_LINE__)      ((((__EXTI_LINE__) & EXTI_PROPERTY_MASK) == EXTI_DIRECT) || \
-                                             (((__EXTI_LINE__) & EXTI_PROPERTY_MASK) == EXTI_CONFIG)          || \
-                                             (((__EXTI_LINE__) & EXTI_PROPERTY_MASK) == EXTI_GPIO))
+#define IS_EXTI_PROPERTY(__LINE__)      ((((__LINE__) & EXTI_PROPERTY_MASK) == EXTI_DIRECT) || \
+                                         (((__LINE__) & EXTI_PROPERTY_MASK) == EXTI_CONFIG)          || \
+                                         (((__LINE__) & EXTI_PROPERTY_MASK) == EXTI_GPIO))
 #if defined (DUAL_CORE)
-#define IS_EXTI_TARGET(__EXTI_LINE__)        ((((__EXTI_LINE__) & EXTI_TARGET_MASK)   == EXTI_TARGET_MSK_CPU1)      || \
-                                             (((__EXTI_LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_CPU2)    || \
-                                             (((__EXTI_LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_ALL_CPU) || \
-                                             (((__EXTI_LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_ALL))
+#define IS_EXTI_TARGET(__LINE__)        ((((__LINE__) & EXTI_TARGET_MASK)   == EXTI_TARGET_MSK_CPU1)      || \
+                                         (((__LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_CPU2)    || \
+                                         (((__LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_ALL_CPU) || \
+                                         (((__LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_ALL))
 #else
-#define IS_EXTI_TARGET(__EXTI_LINE__)        ((((__EXTI_LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_CPU1)   || \
-                                             (((__EXTI_LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_ALL))
+#define IS_EXTI_TARGET(__LINE__)        ((((__LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_CPU1)   || \
+                                         (((__LINE__) & EXTI_TARGET_MASK) == EXTI_TARGET_MSK_ALL))
 #endif
 
-#define IS_EXTI_LINE(__EXTI_LINE__)          ((((__EXTI_LINE__) & ~(EXTI_PROPERTY_MASK | EXTI_EVENT_PRESENCE_MASK |\
-                                              EXTI_REG_MASK | EXTI_PIN_MASK | EXTI_TARGET_MASK)) == 0x00UL) && \
-                                              IS_EXTI_PROPERTY(__EXTI_LINE__) && IS_EXTI_TARGET(__EXTI_LINE__) && \
-                                             (((__EXTI_LINE__) & (EXTI_REG_MASK | EXTI_PIN_MASK))      < \
-                                             (((EXTI_LINE_NB / 32UL) << EXTI_REG_SHIFT) | (EXTI_LINE_NB % 32UL))))
+#define IS_EXTI_LINE(__LINE__)          ((((__LINE__) & ~(EXTI_PROPERTY_MASK | EXTI_EVENT_PRESENCE_MASK | EXTI_REG_MASK | EXTI_PIN_MASK | EXTI_TARGET_MASK)) == 0x00UL) && \
+                                         IS_EXTI_PROPERTY(__LINE__) && IS_EXTI_TARGET(__LINE__) && \
+                                         (((__LINE__) & (EXTI_REG_MASK | EXTI_PIN_MASK))      < \
+                                         (((EXTI_LINE_NB / 32UL) << EXTI_REG_SHIFT) | (EXTI_LINE_NB % 32UL))))
 
-#define IS_EXTI_MODE(__MODE__)               (((__MODE__) & ~EXTI_MODE_MASK) == 0x00UL)
+#define IS_EXTI_MODE(__MODE__)          (((__MODE__) & ~EXTI_MODE_MASK) == 0x00UL)
 
-#define IS_EXTI_TRIGGER(__EXTI_LINE__)       (((__EXTI_LINE__) & ~EXTI_TRIGGER_MASK) == 0x00UL)
+#define IS_EXTI_TRIGGER(__LINE__)       (((__LINE__) & ~EXTI_TRIGGER_MASK) == 0x00UL)
 
-#define IS_EXTI_PENDING_EDGE(__EXTI_LINE__)  (((__EXTI_LINE__) == EXTI_TRIGGER_RISING) || \
-                                             ((__EXTI_LINE__) == EXTI_TRIGGER_FALLING)|| \
-                                             ((__EXTI_LINE__) == EXTI_TRIGGER_RISING_FALLING))
+#define IS_EXTI_PENDING_EDGE(__LINE__)  (((__LINE__) == EXTI_TRIGGER_RISING) || \
+                                         ((__LINE__) == EXTI_TRIGGER_FALLING)|| \
+                                         ((__LINE__) == EXTI_TRIGGER_RISING_FALLING))
 
-#define IS_EXTI_CONFIG_LINE(__EXTI_LINE__)   (((__EXTI_LINE__) & EXTI_CONFIG) != 0x00UL)
+#define IS_EXTI_CONFIG_LINE(__LINE__)   (((__LINE__) & EXTI_CONFIG) != 0x00UL)
 
-#if defined(GPIOI)
 #define IS_EXTI_GPIO_PORT(__PORT__)     (((__PORT__) == EXTI_GPIOA) || \
                                          ((__PORT__) == EXTI_GPIOB) || \
                                          ((__PORT__) == EXTI_GPIOC) || \
@@ -450,18 +431,6 @@ typedef struct
                                          ((__PORT__) == EXTI_GPIOI) || \
                                          ((__PORT__) == EXTI_GPIOJ) || \
                                          ((__PORT__) == EXTI_GPIOK))
-#else
-#define IS_EXTI_GPIO_PORT(__PORT__)     (((__PORT__) == EXTI_GPIOA) || \
-                                         ((__PORT__) == EXTI_GPIOB) || \
-                                         ((__PORT__) == EXTI_GPIOC) || \
-                                         ((__PORT__) == EXTI_GPIOD) || \
-                                         ((__PORT__) == EXTI_GPIOE) || \
-                                         ((__PORT__) == EXTI_GPIOF) || \
-                                         ((__PORT__) == EXTI_GPIOG) || \
-                                         ((__PORT__) == EXTI_GPIOH) || \
-                                         ((__PORT__) == EXTI_GPIOJ) || \
-                                         ((__PORT__) == EXTI_GPIOK))
-#endif /*GPIOI*/
 
 #define IS_EXTI_GPIO_PIN(__PIN__)       ((__PIN__) < 16UL)
 #if defined (LPTIM4) && defined (LPTIM5)
@@ -496,7 +465,7 @@ typedef struct
 /* Configuration functions ****************************************************/
 HAL_StatusTypeDef HAL_EXTI_SetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigTypeDef *pExtiConfig);
 HAL_StatusTypeDef HAL_EXTI_GetConfigLine(EXTI_HandleTypeDef *hexti, EXTI_ConfigTypeDef *pExtiConfig);
-HAL_StatusTypeDef HAL_EXTI_ClearConfigLine(const EXTI_HandleTypeDef *hexti);
+HAL_StatusTypeDef HAL_EXTI_ClearConfigLine(EXTI_HandleTypeDef *hexti);
 HAL_StatusTypeDef HAL_EXTI_RegisterCallback(EXTI_HandleTypeDef *hexti, EXTI_CallbackIDTypeDef CallbackID, void (*pPendingCbfn)(void));
 HAL_StatusTypeDef HAL_EXTI_GetHandle(EXTI_HandleTypeDef *hexti, uint32_t ExtiLine);
 /**
@@ -508,10 +477,10 @@ HAL_StatusTypeDef HAL_EXTI_GetHandle(EXTI_HandleTypeDef *hexti, uint32_t ExtiLin
   * @{
   */
 /* IO operation functions *****************************************************/
-void              HAL_EXTI_IRQHandler(const EXTI_HandleTypeDef *hexti);
-uint32_t          HAL_EXTI_GetPending(const EXTI_HandleTypeDef *hexti, uint32_t Edge);
-void              HAL_EXTI_ClearPending(const EXTI_HandleTypeDef *hexti, uint32_t Edge);
-void              HAL_EXTI_GenerateSWI(const EXTI_HandleTypeDef *hexti);
+void              HAL_EXTI_IRQHandler(EXTI_HandleTypeDef *hexti);
+uint32_t          HAL_EXTI_GetPending(EXTI_HandleTypeDef *hexti, uint32_t Edge);
+void              HAL_EXTI_ClearPending(EXTI_HandleTypeDef *hexti, uint32_t Edge);
+void              HAL_EXTI_GenerateSWI(EXTI_HandleTypeDef *hexti);
 
 /**
   * @}
@@ -535,3 +504,4 @@ void              HAL_EXTI_GenerateSWI(const EXTI_HandleTypeDef *hexti);
 
 #endif /* STM32H7xx_HAL_EXTI_H */
 
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

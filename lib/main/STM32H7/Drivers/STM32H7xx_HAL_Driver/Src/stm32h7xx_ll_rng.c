@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -25,7 +26,7 @@
 #include "stm32_assert.h"
 #else
 #define assert_param(expr) ((void)0U)
-#endif /* USE_FULL_ASSERT */
+#endif
 
 /** @addtogroup STM32H7xx_LL_Driver
   * @{
@@ -41,7 +42,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
-/** @defgroup RNG_LL_Private_Macros RNG Private Macros
+/** @addtogroup RNG_LL_Private_Macros
   * @{
   */
 #define IS_LL_RNG_CED(__MODE__) (((__MODE__) == LL_RNG_CED_ENABLE) || \
@@ -52,14 +53,14 @@
 
 
 #define IS_LL_RNG_NIST_COMPLIANCE(__NIST_COMPLIANCE__) (((__NIST_COMPLIANCE__) == LL_RNG_NIST_COMPLIANT) || \
-                                                        ((__NIST_COMPLIANCE__) == LL_RNG_NOTNIST_COMPLIANT))
+                                                     ((__NIST_COMPLIANCE__) == LL_RNG_NOTNIST_COMPLIANT))
 
 #define IS_LL_RNG_CONFIG1 (__CONFIG1__) ((__CONFIG1__) <= 0x3FUL)
 
 #define IS_LL_RNG_CONFIG2 (__CONFIG2__) ((__CONFIG2__) <= 0x07UL)
 
 #define IS_LL_RNG_CONFIG3 (__CONFIG3__) ((__CONFIG3__) <= 0xFUL)
-#endif /* RNG_CR_CONDRST */
+#endif /* RNG_CR_CONDRST*/
 /**
   * @}
   */
@@ -81,26 +82,16 @@
   *          - SUCCESS: RNG registers are de-initialized
   *          - ERROR: not applicable
   */
-ErrorStatus LL_RNG_DeInit(const RNG_TypeDef *RNGx)
+ErrorStatus LL_RNG_DeInit(RNG_TypeDef *RNGx)
 {
-  ErrorStatus status = SUCCESS;
-
   /* Check the parameters */
   assert_param(IS_RNG_ALL_INSTANCE(RNGx));
-  if (RNGx == RNG)
-  {
-    /* Enable RNG reset state */
-    LL_AHB2_GRP1_ForceReset(LL_AHB2_GRP1_PERIPH_RNG);
+  /* Enable RNG reset state */
+  LL_AHB2_GRP1_ForceReset(LL_AHB2_GRP1_PERIPH_RNG);
 
-    /* Release RNG from reset state */
-    LL_AHB2_GRP1_ReleaseReset(LL_AHB2_GRP1_PERIPH_RNG);
-  }
-  else
-  {
-    status = ERROR;
-  }
-
-  return status;
+  /* Release RNG from reset state */
+  LL_AHB2_GRP1_ReleaseReset(LL_AHB2_GRP1_PERIPH_RNG);
+  return (SUCCESS);
 }
 
 /**
@@ -112,7 +103,7 @@ ErrorStatus LL_RNG_DeInit(const RNG_TypeDef *RNGx)
   *          - SUCCESS: RNG registers are initialized according to RNG_InitStruct content
   *          - ERROR: not applicable
   */
-ErrorStatus LL_RNG_Init(RNG_TypeDef *RNGx, const LL_RNG_InitTypeDef *RNG_InitStruct)
+ErrorStatus LL_RNG_Init(RNG_TypeDef *RNGx, LL_RNG_InitTypeDef *RNG_InitStruct)
 {
   /* Check the parameters */
   assert_param(IS_RNG_ALL_INSTANCE(RNGx));
@@ -162,4 +153,6 @@ void LL_RNG_StructInit(LL_RNG_InitTypeDef *RNG_InitStruct)
   */
 
 #endif /* USE_FULL_LL_DRIVER */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
