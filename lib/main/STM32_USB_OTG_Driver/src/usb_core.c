@@ -28,6 +28,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "usb_core.h"
 #include "usb_bsp.h"
+#include "build/debug.h"
 
 
 /** @addtogroup USB_OTG_DRIVER
@@ -132,9 +133,10 @@ static USB_OTG_STS USB_OTG_CoreReset(USB_OTG_CORE_HANDLE *pdev)
   {
     USB_OTG_BSP_uDelay(3);
     greset.d32 = USB_OTG_READ_REG32(&pdev->regs.GREGS->GRSTCTL);
+    debug[6] = 100;
     if (++count > 200000)
     {
-      return USB_OTG_OK;
+      debug[7] = 101;
     }
   }
   while (greset.b.ahbidle == 0);
@@ -147,7 +149,7 @@ static USB_OTG_STS USB_OTG_CoreReset(USB_OTG_CORE_HANDLE *pdev)
     greset.d32 = USB_OTG_READ_REG32(&pdev->regs.GREGS->GRSTCTL);
     if (++count > 200000)
     {
-      break;
+      debug[5] = 99;
     }
   }
   while (greset.b.csftrst == 1);
@@ -348,7 +350,9 @@ USB_OTG_STS USB_OTG_CoreInit(USB_OTG_CORE_HANDLE *pdev)
     {
       gccfg.b.sofouten = 1;
     }
-    USB_OTG_WRITE_REG32 (&pdev->regs.GREGS->GCCFG, gccfg.d32);
+    USB_OTG_WRITE_REG32(&pdev->regs.GREGS->GCCFG, gccfg.d32);
+    
+    debug[4] = 5003;
 
     /* Init The ULPI Interface */
     usbcfg.d32 = 0;
@@ -393,13 +397,22 @@ USB_OTG_STS USB_OTG_CoreInit(USB_OTG_CORE_HANDLE *pdev)
     gccfg.b.pwdn = 1;
     gccfg.b.disablevbussensing = 1;
 
-    if(pdev->cfg.Sof_output)
+    gccfg.b.vbussensingA = 1;
+    gccfg.b.vbussensingB = 1;
+
+    if (pdev->cfg.Sof_output)
     {
       gccfg.b.sofouten = 1;
     }
-
     USB_OTG_WRITE_REG32 (&pdev->regs.GREGS->GCCFG, gccfg.d32);
     USB_OTG_BSP_mDelay(20);
+    
+    USB_OTG_DCTL_TypeDef dctl_val;
+    dctl_val.b.sftdiscon = 1;
+    USB_OTG_MODIFY_REG32(&pdev->regs.DREGS->DCTL, dctl_val.d32, dctl_val.d32);
+    USB_OTG_BSP_mDelay(3);
+    
+    debug[4] = 7321;
   }
   /* case the HS core is working in FS mode */
   if(pdev->cfg.dma_enable == 1)
@@ -449,6 +462,11 @@ USB_OTG_STS USB_OTG_EnableGlobalInt(USB_OTG_CORE_HANDLE *pdev)
   ahbcfg.d32 = 0;
   ahbcfg.b.glblintrmsk = 1; /* Enable interrupts */
   USB_OTG_MODIFY_REG32(&pdev->regs.GREGS->GAHBCFG, 0, ahbcfg.d32);
+  
+  USB_OTG_DCTL_TypeDef dctl_val;
+  dctl_val.b.sftdiscon = 1;
+  USB_OTG_MODIFY_REG32(&pdev->regs.DREGS->DCTL, dctl_val.d32, 0);
+  USB_OTG_BSP_mDelay(3);
   return status;
 }
 
@@ -491,7 +509,7 @@ USB_OTG_STS USB_OTG_FlushTxFifo (USB_OTG_CORE_HANDLE *pdev , uint32_t num )
     greset.d32 = USB_OTG_READ_REG32( &pdev->regs.GREGS->GRSTCTL);
     if (++count > 200000)
     {
-      break;
+      debug[3] = 23125;
     }
   }
   while (greset.b.txfflsh == 1);
@@ -520,7 +538,7 @@ USB_OTG_STS USB_OTG_FlushRxFifo( USB_OTG_CORE_HANDLE *pdev )
     greset.d32 = USB_OTG_READ_REG32( &pdev->regs.GREGS->GRSTCTL);
     if (++count > 200000)
     {
-      break;
+      debug[2] = 512523;
     }
   }
   while (greset.b.rxfflsh == 1);
