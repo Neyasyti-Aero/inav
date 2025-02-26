@@ -141,6 +141,10 @@ typedef enum {
     TASK_GEOZONE,
 #endif
 
+#if defined (USE_TASK_TARGETTASK)
+    TASK_TARGETTASK,
+#endif
+
     /* Count of real tasks */
     TASK_COUNT,
 

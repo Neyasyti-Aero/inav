@@ -25,6 +25,22 @@
 #define USE_HARDWARE_REVISION_DETECTION
 #define USE_HARDWARE_PREBOOT_SETUP
 
+/* from src/main/scheduler/scheduler.h
+typedef enum {
+    TASK_PRIORITY_IDLE = 0,     // Disables dynamic scheduling, task is executed only if no other task is active this cycle
+    TASK_PRIORITY_LOW = 1,
+    TASK_PRIORITY_MEDIUM = 3,
+    TASK_PRIORITY_MEDIUM_HIGH = 4,
+    TASK_PRIORITY_HIGH = 5,
+    TASK_PRIORITY_REALTIME = 18,
+    TASK_PRIORITY_MAX = 255    // Can never be used
+} cfTaskPriority_e;
+*/
+
+#define USE_TASK_TARGETTASK
+#define TARGETTASK_PERIOD TASK_PERIOD_HZ(1)
+#define TARGETTASK_PRIORITY TASK_PRIORITY_LOW
+
 #define LED0			PG0
 #define LED1			PG1
 

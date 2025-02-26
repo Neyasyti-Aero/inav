@@ -61,5 +61,6 @@ void detectHardwareRevision(void)
 void updateHardwareRevision(void)
 {
 	// USB VCP can not be connected on this call (too early)
-	LOG_INFO(SYSTEM, "DEBUG ID (FULL): %lu (0x%08lX)\nDEVICE ID: %lu (0x%03lX)", dbg_id, dbg_id, device_id, device_id);
+    LOG_INFO(SYSTEM, "DEBUG ID (FULL): %lu (0x%08lX)", dbg_id, dbg_id);
+    LOG_INFO(SYSTEM, "DEVICE ID: %lu (0x%03lX)", device_id, device_id);
 }
