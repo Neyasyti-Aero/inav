@@ -37,30 +37,12 @@ uint32_t dbg_id;
 // called from init() - early
 void detectHardwareRevision(void)
 {
-    // delay(1); // delay in ms
 
-    // For STM32F405/407xx and STM32F415/417xx devices, the device ID is 0x413
-    // For STM32F42xxx and STM32F43xxx devices, the device ID is 0x419
-    // For STM32F401xx devices, the device ID is 0x423
-    // For STM32F401xx devices, the device ID is 0x433
-    // For STM32F411xx devices, the device ID is 0x431
-    // For STM32F410xx devices, the device ID is 0x458
-    // For STM32F412xx devices, the device ID is 0x441
-    // For STM32F413xx and STM32423xx devices, the device ID is 0x463
-    // For STM32F446xx devices, the device ID is 0x421
-    // For STM32F469xx and STM32F479xx devices, the device ID is 0x434
-    
-    // Check device id
-    dbg_id = *(uint32_t*)(0xE0042000); // DBG_ID / DBGMCU_IDCODE
-    device_id = *(uint32_t*)(0xE0042000) & 0xFFF; // device ID
-    debug[6] = *(uint32_t*)(0xE0042000); // DBG_ID / DBGMCU_IDCODE
-    debug[7] = *(uint32_t*)(0xE0042000) & 0xFFF; // device ID
 }
 
 // called from init() - later
+// USB VCP can not be connected on this call (too early)
 void updateHardwareRevision(void)
 {
-	// USB VCP can not be connected on this call (too early)
-    LOG_INFO(SYSTEM, "DEBUG ID (FULL): %lu (0x%08lX)", dbg_id, dbg_id);
-    LOG_INFO(SYSTEM, "DEVICE ID: %lu (0x%03lX)", device_id, device_id);
+
 }

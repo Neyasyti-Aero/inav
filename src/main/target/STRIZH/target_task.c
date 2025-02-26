@@ -22,7 +22,26 @@
 #ifdef USE_TASK_TARGETTASK
 
 #include "common/log.h"
-#include "build/debug.h"
+
+uint8_t called = 0;
+
+// called only once
+// FC was fully initialized by this moment
+void firstTimeTaskCall(timeUs_t currentTimeUs)
+{
+	UNUSED(currentTimeUs);
+
+	uint32_t dbg_id = *(uint32_t*)(0xE0042000); // DBG_ID / DBGMCU_IDCODE
+    uint32_t device_id = *(uint32_t*)(0xE0042000) & 0xFFF; // device ID
+
+    LOG_INFO(SYSTEM, "DEBUG ID (FULL): %lu (0x%08lX)", dbg_id, dbg_id);
+    LOG_INFO(SYSTEM, "DEVICE ID: %lu (0x%03lX)", device_id, device_id);
+}
+
+void regularTaskCall(timeUs_t currentTimeUs)
+{
+	UNUSED(currentTimeUs);
+}
 
 void targetTaskCall(timeUs_t currentTimeUs)
 {
@@ -32,11 +51,13 @@ void targetTaskCall(timeUs_t currentTimeUs)
     LOG_DEBUG(SYSTEM, "Target task call, currentTimeUs: %lu", currentTimeUs);
 #endif
 
-    uint32_t dbg_id = *(uint32_t*)(0xE0042000); // DBG_ID / DBGMCU_IDCODE
-    uint32_t device_id = *(uint32_t*)(0xE0042000) & 0xFFF; // device ID
+    if (!called)
+    {
+        called = 1;
+        firstTimeTaskCall(currentTimeUs);
+    }
 
-    LOG_INFO(SYSTEM, "DEBUG ID (FULL): %lu (0x%08lX)", dbg_id, dbg_id);
-    LOG_INFO(SYSTEM, "DEVICE ID: %lu (0x%03lX)", device_id, device_id);
+    regularTaskCall(currentTimeUs);
 }
 
-#endif
+#endif /* USE_TASK_TARGETTASK */

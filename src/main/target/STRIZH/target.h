@@ -25,6 +25,8 @@
 #define USE_HARDWARE_REVISION_DETECTION
 #define USE_HARDWARE_PREBOOT_SETUP
 
+#define DEFAULT_LOG_LEVEL LOG_LEVEL_INFO
+
 /* from src/main/scheduler/scheduler.h
 typedef enum {
     TASK_PRIORITY_IDLE = 0,     // Disables dynamic scheduling, task is executed only if no other task is active this cycle
@@ -39,7 +41,7 @@ typedef enum {
 
 #define USE_TASK_TARGETTASK
 #define TARGETTASK_PERIOD TASK_PERIOD_HZ(1)
-#define TARGETTASK_PRIORITY TASK_PRIORITY_LOW
+#define TARGETTASK_PRIORITY TASK_PRIORITY_IDLE
 
 #define LED0			PG0
 #define LED1			PG1

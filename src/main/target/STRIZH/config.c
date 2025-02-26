@@ -39,15 +39,18 @@ void targetConfiguration(void)
     // pinioBoxConfigMutable()->permanentId[1] = BOX_PERMANENT_ID_USER2;
 
     mixerConfigMutable()->platformType = PLATFORM_AIRPLANE; // default mixer to Airplane
-    
+
     serialConfigMutable()->portConfigs[0].functionMask = FUNCTION_LOG | FUNCTION_MSP;
     serialConfigMutable()->portConfigs[0].msp_baudrateIndex = BAUD_115200;
-    void *ptr = settingGetValuePointer(settingFind("log_level"));
-    *(int8_t *)ptr = LOG_LEVEL_DEBUG;
+#ifdef DEFAULT_LOG_LEVEL
+    *(int8_t *)settingGetValuePointer(settingFind("log_level")) = DEFAULT_LOG_LEVEL;
+#else
+    *(int8_t *)settingGetValuePointer(settingFind("log_level")) = LOG_LEVEL_ERROR;
+#endif
 
     serialConfigMutable()->portConfigs[1].functionMask = FUNCTION_TELEMETRY_MAVLINK;
     serialConfigMutable()->portConfigs[1].telemetry_baudrateIndex = BAUD_115200;
-    
+
     serialConfigMutable()->portConfigs[2].functionMask = FUNCTION_GPS;
     serialConfigMutable()->portConfigs[2].gps_baudrateIndex = BAUD_115200;
 }

@@ -23,7 +23,7 @@
 
 #include "common/log.h"
 
-// called in init()
+// called in init() - the erliest target-specific call from init()
 void initialisePreBootHardware(void)
 {
 
