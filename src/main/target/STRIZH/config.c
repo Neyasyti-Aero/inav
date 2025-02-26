@@ -29,6 +29,9 @@
 #include "fc/fc_msp_box.h"
 #include "io/piniobox.h"
 
+#include "common/log.h"
+#include "fc/settings.h"
+
 // set default settings for STRIZH target
 void targetConfiguration(void)
 {  
@@ -39,6 +42,8 @@ void targetConfiguration(void)
     
     serialConfigMutable()->portConfigs[0].functionMask = FUNCTION_LOG | FUNCTION_MSP;
     serialConfigMutable()->portConfigs[0].msp_baudrateIndex = BAUD_115200;
+    void *ptr = settingGetValuePointer(settingFind("log_level"));
+    *(int8_t *)ptr = LOG_LEVEL_DEBUG;
 
     serialConfigMutable()->portConfigs[1].functionMask = FUNCTION_TELEMETRY_MAVLINK;
     serialConfigMutable()->portConfigs[1].telemetry_baudrateIndex = BAUD_115200;
