@@ -345,6 +345,15 @@ void geozoneUpdateTask(timeUs_t currentTimeUs)
 }
 #endif
 
+#ifdef USE_TASK_TARGETTASK
+void targetTaskCall(timeUs_t currentTimeUs);
+
+void taskTargetTask(timeUs_t currentTimeUs)
+{
+	targetTaskCall(currentTimeUs);
+}
+#endif
+
 void fcTasksInit(void)
 {
     schedulerInit();
@@ -462,6 +471,10 @@ void fcTasksInit(void)
 
 #ifdef USE_GEOZONE
     setTaskEnabled(TASK_GEOZONE, feature(FEATURE_GEOZONE));
+#endif
+
+#ifdef USE_TASK_TARGETTASK
+    setTaskEnabled(TASK_TARGETTASK, true);
 #endif
 
 }
@@ -757,6 +770,23 @@ cfTask_t cfTasks[TASK_COUNT] = {
         .taskFunc = geozoneUpdateTask,
         .desiredPeriod = TASK_PERIOD_HZ(5),
         .staticPriority = TASK_PRIORITY_MEDIUM,
+    },
+#endif
+
+#ifdef USE_TASK_TARGETTASK
+    [TASK_TARGETTASK] = {
+        .taskName = "TARGET TASK",
+        .taskFunc = taskTargetTask,
+#ifdef TARGETTASK_PERIOD
+        .desiredPeriod = TARGETTASK_PERIOD,
+#else
+        .desiredPeriod = TASK_PERIOD_HZ(1),
+#endif
+#ifdef TARGETTASK_PRIORITY
+        .staticPriority = TARGETTASK_PRIORITY,
+#else
+        .staticPriority = TASK_PRIORITY_IDLE,
+#endif
     },
 #endif
 

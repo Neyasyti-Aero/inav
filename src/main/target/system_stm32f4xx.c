@@ -319,8 +319,6 @@
 #include "system_stm32f4xx.h"
 #include "drivers/system.h"
 
-uint32_t hse_value = HSE_VALUE;
-
 /**
   * @}
   */
@@ -371,6 +369,15 @@ uint32_t hse_value = HSE_VALUE;
 /******************************************************************************/
 
 /************************* PLL Parameters *************************************/
+#ifdef USE_HSI
+
+#define PLL_M 16
+uint32_t hse_value = HSI_VALUE;
+#define RCC_CR_HSITRIM_Pos (3U)
+
+#else /* USE_HSI */
+
+uint32_t hse_value = HSE_VALUE;
 #if defined(STM32F40_41xxx) || defined(STM32F427_437xx) || defined(STM32F429_439xx) || defined(STM32F401xx) || defined(STM32F469_479xx) || defined (STM32F446xx) || defined (STM32F410xx) || defined (STM32F411xE)
     #if HSE_VALUE == 25000000
 	#define PLL_M   25
@@ -387,6 +394,8 @@ uint32_t hse_value = HSE_VALUE;
     #error Undefined CPU
 #endif /* STM32F40_41xxx || STM32F427_437xx || STM32F429_439xx || STM32F401xx || STM32F469_479xx */
 
+#endif /* USE_HSI */
+
 #if defined(STM32F446xx)
 /* PLL division factor for I2S, SAI, SYSTEM and SPDIF: Clock =  PLL_VCO / PLLR */
 #define PLL_R      7
@@ -401,11 +410,21 @@ uint32_t hse_value = HSE_VALUE;
 #endif /* STM32F427_437x || STM32F429_439xx || STM32F446xx || STM32F469_479xx */
 
 #if defined (STM32F40_41xxx)
+
+#ifdef INCREASE_PLL_FROM_168_TO_192MHZ
+#define PLL_N      384
+/* SYSCLK = PLL_VCO / PLL_P */
+#define PLL_P      2
+/* USB OTG FS, SDIO and RNG Clock =  PLL_VCO / PLLQ */
+#define PLL_Q      8
+#else /* INCREASE_PLL_FROM_168_TO_192MHZ */
 #define PLL_N      336
 /* SYSCLK = PLL_VCO / PLL_P */
 #define PLL_P      2
 /* USB OTG FS, SDIO and RNG Clock =  PLL_VCO / PLLQ */
 #define PLL_Q      7
+#endif /* INCREASE_PLL_FROM_168_TO_192MHZ */
+
 #endif /* STM32F40_41xxx */
 
 #if defined(STM32F401xx)
@@ -641,17 +660,35 @@ void SetSysClock(void)
 /******************************************************************************/
   __IO uint32_t StartUpCounter = 0, HSEStatus = 0;
 
+#ifdef USE_HSI
+
+  MODIFY_REG(RCC->CR, RCC_CR_HSITRIM, (uint32_t)16 << RCC_CR_HSITRIM_Pos);
+  /* Enable HSI */
+  RCC->CR |= ((uint32_t)RCC_CR_HSION);
+
+#else /* USE_HSI */
+
   /* Enable HSE */
   RCC->CR |= ((uint32_t)RCC_CR_HSEON);
+
+#endif /* USE_HSI */
 
   /* Wait till HSE is ready and if Time out is reached exit */
   do
   {
+#ifdef USE_HSI
+    HSEStatus = RCC->CR & RCC_CR_HSIRDY;
+#else /* USE_HSI */
     HSEStatus = RCC->CR & RCC_CR_HSERDY;
+#endif /* USE_HSI */
     StartUpCounter++;
   } while ((HSEStatus == 0) && (StartUpCounter != HSE_STARTUP_TIMEOUT));
 
+#ifdef USE_HSI
+  if ((RCC->CR & RCC_CR_HSIRDY) != RESET)
+#else /* USE_HSI */
   if ((RCC->CR & RCC_CR_HSERDY) != RESET)
+#endif /* USE_HSI */
   {
     HSEStatus = (uint32_t)0x01;
   }
@@ -693,14 +730,18 @@ void SetSysClock(void)
     RCC->CFGR |= RCC_CFGR_PPRE1_DIV2;
 #endif /* STM32F410xx || STM32F411xE */
 
+    /* Configure the main PLL */
+    RCC->PLLCFGR = PLL_M | (PLL_N << 6) | (((PLL_P >> 1) -1) << 16) |
+#ifdef USE_HSI
+                  (RCC_PLLCFGR_PLLSRC_HSI) | (PLL_Q << 24)
+#else /* USE_HSI */
+                  (RCC_PLLCFGR_PLLSRC_HSE) | (PLL_Q << 24)
+#endif /* USE_HSI */
+
 #if defined(STM32F446xx)
-    /* Configure the main PLL */
-    RCC->PLLCFGR = PLL_M | (PLL_N << 6) | (((PLL_P >> 1) -1) << 16) |
-                   (RCC_PLLCFGR_PLLSRC_HSE) | (PLL_Q << 24) | (PLL_R << 28);
+                  | (PLL_R << 28);
 #else
-    /* Configure the main PLL */
-    RCC->PLLCFGR = PLL_M | (PLL_N << 6) | (((PLL_P >> 1) -1) << 16) |
-                   (RCC_PLLCFGR_PLLSRC_HSE) | (PLL_Q << 24);
+                  ;
 #endif /* STM32F446xx */
 
     /* Enable the main PLL */
@@ -743,7 +784,7 @@ void SetSysClock(void)
     }
   }
   else
-  { /* If HSE fails to start-up, the application will have wrong clock
+  { /* If HSE or HSI fails to start-up, the application will have wrong clock
          configuration. User can add here some code to deal with this error */
     while(1) { __NOP(); }
   }
