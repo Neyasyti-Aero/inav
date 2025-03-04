@@ -62,7 +62,7 @@ typedef enum {
 #define SPI2_MOSI_PIN		PC1
 
 #define USE_IMU_BMI088
-#define IMU_BMI088_ALIGN	CW0_DEG
+#define IMU_BMI088_ALIGN	CW90_DEG
 #define BMI088_SPI_BUS		BUS_SPI1
 #define BMI088_GYRO_CS_PIN	PG11
 //#define BMI088_GYRO_EXTI_PIN	PG6 // not used
