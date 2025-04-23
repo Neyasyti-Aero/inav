@@ -40,7 +40,7 @@ typedef enum {
 */
 
 #define USE_TASK_TARGETTASK
-#define TARGETTASK_PERIOD TASK_PERIOD_HZ(100)
+#define TARGETTASK_PERIOD TASK_PERIOD_HZ(25)
 #define TARGETTASK_PRIORITY TASK_PRIORITY_LOW
 
 #define LED0			PG0
@@ -85,7 +85,7 @@ typedef enum {
 
 #define DEFAULT_I2C_BUS		BUS_I2C2
 #define EXTERNAL_I2C_BUS	BUS_I2C2
-#define MAG_I2C_BUS		BUS_I2C2
+#define MAG_I2C_BUS			BUS_I2C2
 
 /* ERRATA: SCL and SDA mixed up on QMC's side
 #define USE_MAG
@@ -182,3 +182,4 @@ typedef enum {
 #define TARGET_IO_PORTG		0xffff
 
 #define MAX_PWM_OUTPUT_PORTS	13
+

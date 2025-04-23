@@ -35,22 +35,22 @@ uint8_t called = 0;
 // It is neccessary to configure RX and MIXER (all outputs to SERVO)
 // Enable motor and servo output should be enabled
 
-// Сигнал - функция
-// 1 - зажать кнопку зажигания
-// 2 - отжать кнопку зажигания
-// 3 - включить фары 1 режим
-// 4 - включить фары - 2 режим (дальний свет)
-// 5 - выключить фары
-// 6 - включить фары - 3 режим
-// 7 - гудок полсекунды
+// Command - function
+// 1 - Starter On
+// 2 - Starter Off
+// 3 - Headlights Mode 1
+// 4 - Headlights Mode 2 (far)
+// 5 - Headlights Off
+// 6 - Headlights Mode 3
+// 7 - Horn 0.5 sec
 // 8 - 
-// 9 - зажать чёрный курок сзади (включить дальний свет)
-// 10 - дальний свет мигать (выключить дальний свет)
-// 11 - включить левый поворотник
-// 12 - отключить поворотники
-// 13 - включить правый поворотник
-// 14 - насос - нажать
-// 15 - насос - отжать
+// 9 - Black curok szadi (turn on far headlights)
+// 10 - Far headlights blink (turn off far headlights)
+// 11 - left turn signal ON
+// 12 - turn signals OFF
+// 13 - right turn signal ON
+// 14 - Pump - press
+// 15 - Pumb - unpress
 
 #define IGNITION_PRESS "1\r\n"
 #define IGNITION_UNPRESS "2\r\n"
@@ -82,10 +82,10 @@ uint8_t called = 0;
 
 // PWM OUTPUTS
 // the nearest to USB out has id of 12
-#define STEERING_PWM_OUT 0
-#define ACCELERATOR_PWM_OUT 1
-#define BRAKE_PWM_OUT 2
-#define TRANSMISSION_PWM_OUT 3
+#define STEERING_PWM_OUT 4
+#define ACCELERATOR_PWM_OUT 5
+#define BRAKE_PWM_OUT 6
+#define TRANSMISSION_PWM_OUT 7
 
 static serialPort_t *buttons_usart_port;
 
@@ -102,11 +102,24 @@ void firstTimeTaskCall(timeUs_t currentTimeUs)
     LOG_INFO(SYSTEM, "DEVICE ID: %lu (0x%03lX)", device_id, device_id);
     
     buttons_usart_port = openSerialPort(SERIAL_PORT_USART2, FUNCTION_LOG, NULL, NULL, 9600, MODE_TX, SERIAL_NOT_INVERTED);
+    
+    // zero initial state
+    for (int i = 0; i < 13; i++)
+	{
+		pwmWriteServo(i, 100);
+	}
 }
 
 bool armed = false;
-uint32_t transmission_pwm_values[] = {1000, 1250, 1400, 1600, 1800};
+
+// parking, reverse, neutral, pov, pon
+const uint32_t transmission_pwm_values[] = {950, 1200, 1400, 1600, 2000};
 uint8_t transmission_modes_count = sizeof(transmission_pwm_values) / sizeof(transmission_pwm_values[0]);
+int8_t transmission_current_gear = 0;
+bool lower_button_pressed = false;
+bool higher_button_pressed = false;
+
+bool waseverrecieving = false;
 
 void regularTaskCall(timeUs_t currentTimeUs)
 {
@@ -121,25 +134,44 @@ void regularTaskCall(timeUs_t currentTimeUs)
 	// check if inav was armed
 	// if (ARMING_FLAG(ARMED))
 	
+	if (rxIsReceivingSignal() && rxAreFlightChannelsValid() && !waseverrecieving && rxGetChannelValue(ARMING_CH) < 1300)
+	{
+		waseverrecieving = true;
+		
+		// enable parking
+		transmission_current_gear = 0;
+		pwmWriteServo(TRANSMISSION_PWM_OUT, transmission_pwm_values[transmission_current_gear]);
+	}
+	
+	// if never recieved => do nothing
+	if (!waseverrecieving)
+	{
+		return;
+	}
+	
+	// Here we are sure that Rx is OK or failsafe
+	
+	bool oldarmed = armed;
+	
 	// Handle ARMING
 	if (rxGetChannelValue(ARMING_CH) > 1700)
 	{
-		// Разрешение управления бензонасосом и стартером
+		// Starter and pump can be controlled
 		if (rxGetChannelValue(PUMP_STARTER_CH) > 1700)
 		{
-			// Стартер включен, бензонасос включен
+			// Starter on, pumb on
 			serialWriteBuf(buttons_usart_port, IGNITION_PRESS, strlen(IGNITION_PRESS));
 			serialWriteBuf(buttons_usart_port, PUMP_ON, strlen(PUMP_ON));
 		}
 		else if (rxGetChannelValue(PUMP_STARTER_CH) > 1300)
 		{
-			// Стартер выключен, бензонасос включен
+			// Starter off, pump on
 			serialWriteBuf(buttons_usart_port, IGNITION_UNPRESS, strlen(IGNITION_UNPRESS));
 			serialWriteBuf(buttons_usart_port, PUMP_ON, strlen(PUMP_ON));	
 		}
 		else
 		{
-			// Стартер выключен, бензонасос выключен
+			// Starter off, pump off
 			serialWriteBuf(buttons_usart_port, IGNITION_UNPRESS, strlen(IGNITION_UNPRESS));
 			serialWriteBuf(buttons_usart_port, PUMP_OFF, strlen(PUMP_OFF));
 		}
@@ -147,62 +179,129 @@ void regularTaskCall(timeUs_t currentTimeUs)
 	}
 	else if (rxGetChannelValue(ARMING_CH) > 1300)
 	{
-		// Можно управлять всем, кроме бензонасоса и стартера
+		// everything except pump and starter can be controlled
 		armed = true;
 	}
 	else
 	{
-		// Не управлять ничем
+		// do not control anything
 		armed = false;
 	}
 	
-	// Handle Buttons Control
-	// Handle headlights
-	if (rxGetChannelValue(LIGHTS_CH) > 1700)
+	// armed right now - parking needed
+	if (!oldarmed && armed)
 	{
-		serialWriteBuf(buttons_usart_port, HEADLIGHTS_MODE_2, strlen(HEADLIGHTS_MODE_2));
-	}
-	else if (rxGetChannelValue(LIGHTS_CH) > 1300)
-	{
-		serialWriteBuf(buttons_usart_port, HEADLIGHTS_MODE_1, strlen(HEADLIGHTS_MODE_1));
-	}
-	else
-	{
-		// Turn headlights off
-		serialWriteBuf(buttons_usart_port, HEADLIGHTS_OFF, strlen(HEADLIGHTS_OFF));
+		// enable parking
+		transmission_current_gear = 0;
+		pwmWriteServo(TRANSMISSION_PWM_OUT, transmission_pwm_values[transmission_current_gear]);
 	}
 	
-	// Handle Motion Control (arming required)
+	// Handle Control (arming required)
 	if (armed && rxIsReceivingSignal() && rxAreFlightChannelsValid())
 	{
+		// Handle Buttons Control
+		// Handle headlights
+		if (rxGetChannelValue(LIGHTS_CH) > 1700)
+		{
+			serialWriteBuf(buttons_usart_port, HEADLIGHTS_MODE_2, strlen(HEADLIGHTS_MODE_2));
+		}
+		else if (rxGetChannelValue(LIGHTS_CH) > 1300)
+		{
+			serialWriteBuf(buttons_usart_port, HEADLIGHTS_MODE_1, strlen(HEADLIGHTS_MODE_1));
+		}
+		else
+		{
+			// Turn headlights off
+			serialWriteBuf(buttons_usart_port, HEADLIGHTS_OFF, strlen(HEADLIGHTS_OFF));
+		}
+	
 		// Steering
 		pwmWriteServo(STEERING_PWM_OUT, rxGetChannelValue(STEERING_CH));
 		
 		// Accelerator & Brake
 		if (rxGetChannelValue(ACCELERATOR_BRAKE_CH) > 1550)
 		{
-			pwmWriteServo(ACCELERATOR_PWM_OUT, (rxGetChannelValue(ACCELERATOR_BRAKE_CH) - 1550) * 2 + 1000);
-			pwmWriteServo(BRAKE_PWM_OUT, 1000);
+			// calculate accel (proportional), spin brake to minimum
+			pwmWriteServo(ACCELERATOR_PWM_OUT, 2000 - (rxGetChannelValue(ACCELERATOR_BRAKE_CH) - 1550) * 2);
+			pwmWriteServo(BRAKE_PWM_OUT, 2000);
 		}
 		else if (rxGetChannelValue(ACCELERATOR_BRAKE_CH) < 1450)
 		{
-			pwmWriteServo(ACCELERATOR_PWM_OUT, 1000);
-			pwmWriteServo(BRAKE_PWM_OUT, (1450 - rxGetChannelValue(ACCELERATOR_BRAKE_CH)) * 2 + 1000);
+			// minimum accel, spin brake to maximum
+			pwmWriteServo(ACCELERATOR_PWM_OUT, 2000);
+			pwmWriteServo(BRAKE_PWM_OUT, 1000);
 		}
 		else
 		{
-			pwmWriteServo(ACCELERATOR_PWM_OUT, 1000);
-			pwmWriteServo(BRAKE_PWM_OUT, 1000);
+			// minimum accel, do not spin brake
+			pwmWriteServo(ACCELERATOR_PWM_OUT, 2000);
+			pwmWriteServo(BRAKE_PWM_OUT, 1500);
 		}
 		
 		// Transmission
+		// allow hear switch only if acc < 1200
+		if (rxGetChannelValue(ACCELERATOR_BRAKE_CH) < 1200)
+		{
+			if (higher_button_pressed && !lower_button_pressed && rxGetChannelValue(TRANSMISSION_LOWER_CH) < 1400 && rxGetChannelValue(TRANSMISSION_HIGHER_CH) < 1400)
+			{
+				// higher gear required
+				transmission_current_gear++;
+				if (transmission_current_gear > transmission_modes_count - 1)
+					transmission_current_gear = transmission_modes_count - 1;
+			
+				pwmWriteServo(TRANSMISSION_PWM_OUT, transmission_pwm_values[transmission_current_gear]);
+			}
+			else if (lower_button_pressed && !higher_button_pressed && rxGetChannelValue(TRANSMISSION_LOWER_CH) < 1400 && rxGetChannelValue(TRANSMISSION_HIGHER_CH) < 1400)
+			{
+				// lower gear required
+				transmission_current_gear--;
+				if (transmission_current_gear < 0)
+					transmission_current_gear = 0;
+			
+				pwmWriteServo(TRANSMISSION_PWM_OUT, transmission_pwm_values[transmission_current_gear]);
+			}
+			
+			if (rxGetChannelValue(TRANSMISSION_LOWER_CH) > 1700 && rxGetChannelValue(TRANSMISSION_HIGHER_CH) < 1400)
+			{
+				lower_button_pressed = true;
+				higher_button_pressed = false;
+			}
+			else if (rxGetChannelValue(TRANSMISSION_HIGHER_CH) > 1700 && rxGetChannelValue(TRANSMISSION_LOWER_CH) < 1400)
+			{
+				lower_button_pressed = false;
+				higher_button_pressed = true;
+			}
+			else
+			{
+				lower_button_pressed = false;
+				higher_button_pressed = false;
+			}
+		}
 	}
-	else
+	else if (!armed)
 	{
-		// управление полностью запрещено
+		// fully prevent any control output
 		for (int i = 0; i < 13; i++)
 		{
-			pwmWriteServo(i, 0);
+			pwmWriteServo(i, 100);
+		}
+	}
+	
+	// lost signal
+	if (waseverrecieving && !(rxIsReceivingSignal() && rxAreFlightChannelsValid()))
+	{
+		if (armed)
+		{
+			// failsafe - spin brake to maximum, minimum accel, stop ignition and pump
+			pwmWriteServo(ACCELERATOR_PWM_OUT, 2000);
+			pwmWriteServo(BRAKE_PWM_OUT, 1000);
+			serialWriteBuf(buttons_usart_port, IGNITION_UNPRESS, strlen(IGNITION_UNPRESS));
+			serialWriteBuf(buttons_usart_port, PUMP_OFF, strlen(PUMP_OFF));
+		}
+		else
+		{
+			// reset to initial state
+			waseverrecieving = false;
 		}
 	}
 }
