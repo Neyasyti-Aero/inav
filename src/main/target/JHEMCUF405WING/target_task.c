@@ -35,7 +35,7 @@ uint8_t called = 0;
 // It is neccessary to configure RX and MIXER (all outputs to SERVO)
 // Enable motor and servo output should be enabled
 
-// Command - function
+// Command - function (check ASCII table)
 // 1 - Starter On
 // 2 - Starter Off
 // 3 - Headlights Mode 1
@@ -50,22 +50,22 @@ uint8_t called = 0;
 // 12 - turn signals OFF
 // 13 - right turn signal ON
 // 14 - Pump - press
-// 15 - Pumb - unpress
+// 15 - Pump - unpress
 
-#define IGNITION_PRESS "1\r\n"
-#define IGNITION_UNPRESS "2\r\n"
-#define HEADLIGHTS_MODE_1 "3\r\n"
-#define HEADLIGHTS_MODE_2 "4\r\n"
-#define HEADLIGHTS_OFF "5\r\n"
-#define HEADLIGHTS_MODE_3 "6\r\n"
-#define HORN "7\r\n"
-#define HEADLIGHTS_FAR_PRESS "9\r\n"
-#define HEADLIGHTS_FAR_UNPRESS "10\r\n"
-#define LEFT_TURN_SIGNAL_ON "11\r\n"
-#define TURN_SIGNALS_OFF "12\r\n"
-#define RIGHT_TURN_SIGNAL_ON "13\r\n"
-#define PUMP_ON "14\r\n"
-#define PUMP_OFF "15\r\n"
+#define IGNITION_PRESS "1"
+#define IGNITION_UNPRESS "2"
+#define HEADLIGHTS_MODE_1 "3"
+#define HEADLIGHTS_MODE_2 "4"
+#define HEADLIGHTS_OFF "5"
+#define HEADLIGHTS_MODE_3 "6"
+#define HORN "7"
+#define HEADLIGHTS_FAR_PRESS "9"
+#define HEADLIGHTS_FAR_UNPRESS ":"
+#define LEFT_TURN_SIGNAL_ON ";"
+#define TURN_SIGNALS_OFF "<"
+#define RIGHT_TURN_SIGNAL_ON "="
+#define PUMP_ON ">"
+#define PUMP_OFF "?"
 
 // RC CHANNELS
 #define RESERVED_ALIERON 0
@@ -73,7 +73,7 @@ uint8_t called = 0;
 #define STEERING_CH 2
 
 #define PUMP_STARTER_CH 4
-#define RESERVER_3POS_SWITCH_SC 5
+#define RESERVED_3POS_SWITCH_SC 5
 #define ARMING_CH 6
 #define LIGHTS_CH 7
 
@@ -159,7 +159,7 @@ void regularTaskCall(timeUs_t currentTimeUs)
 		// Starter and pump can be controlled
 		if (rxGetChannelValue(PUMP_STARTER_CH) > 1700)
 		{
-			// Starter on, pumb on
+			// Starter on, pump on
 			serialWriteBuf(buttons_usart_port, IGNITION_PRESS, strlen(IGNITION_PRESS));
 			serialWriteBuf(buttons_usart_port, PUMP_ON, strlen(PUMP_ON));
 		}
@@ -203,11 +203,11 @@ void regularTaskCall(timeUs_t currentTimeUs)
 		// Handle headlights
 		if (rxGetChannelValue(LIGHTS_CH) > 1700)
 		{
-			serialWriteBuf(buttons_usart_port, HEADLIGHTS_MODE_2, strlen(HEADLIGHTS_MODE_2));
+			serialWriteBuf(buttons_usart_port, HEADLIGHTS_MODE_1, strlen(HEADLIGHTS_MODE_2));
 		}
 		else if (rxGetChannelValue(LIGHTS_CH) > 1300)
 		{
-			serialWriteBuf(buttons_usart_port, HEADLIGHTS_MODE_1, strlen(HEADLIGHTS_MODE_1));
+			serialWriteBuf(buttons_usart_port, HEADLIGHTS_MODE_2, strlen(HEADLIGHTS_MODE_1));
 		}
 		else
 		{
