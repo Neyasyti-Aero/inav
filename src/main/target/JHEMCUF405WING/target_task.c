@@ -181,11 +181,17 @@ void regularTaskCall(timeUs_t currentTimeUs)
 	{
 		// everything except pump and starter can be controlled
 		armed = true;
+		// Starter off, pump off
+		serialWriteBuf(buttons_usart_port, IGNITION_UNPRESS, strlen(IGNITION_UNPRESS));
+		serialWriteBuf(buttons_usart_port, PUMP_OFF, strlen(PUMP_OFF));
 	}
 	else
 	{
 		// do not control anything
 		armed = false;
+		// Starter off, pump off
+		serialWriteBuf(buttons_usart_port, IGNITION_UNPRESS, strlen(IGNITION_UNPRESS));
+		serialWriteBuf(buttons_usart_port, PUMP_OFF, strlen(PUMP_OFF));
 	}
 	
 	// armed right now - parking needed
