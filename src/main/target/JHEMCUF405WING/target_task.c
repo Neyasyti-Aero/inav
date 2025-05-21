@@ -69,8 +69,9 @@ uint8_t called = 0;
 
 // RC CHANNELS
 #define RESERVED_ALIERON 0
-#define ACCELERATOR_BRAKE_CH 1
+#define BRAKE_CH 1
 #define STEERING_CH 2
+#define ACCELERATOR_CH 3
 
 #define PUMP_STARTER_CH 4
 #define RESERVED_3POS_SWITCH_SC 5
@@ -224,29 +225,26 @@ void regularTaskCall(timeUs_t currentTimeUs)
 		// Steering
 		pwmWriteServo(STEERING_PWM_OUT, rxGetChannelValue(STEERING_CH));
 		
-		// Accelerator & Brake
-		if (rxGetChannelValue(ACCELERATOR_BRAKE_CH) > 1550)
+		// Brake (min <-> 2000, max <-> 1000)
+		if (rxGetChannelValue(BRAKE_CH) > 1550)
 		{
-			// calculate accel (proportional), spin brake to minimum
-			pwmWriteServo(ACCELERATOR_PWM_OUT, 2000 - (rxGetChannelValue(ACCELERATOR_BRAKE_CH) - 1550) * 2);
 			pwmWriteServo(BRAKE_PWM_OUT, 2000);
 		}
-		else if (rxGetChannelValue(ACCELERATOR_BRAKE_CH) < 1450)
+		else if (rxGetChannelValue(BRAKE_CH) < 1450)
 		{
-			// minimum accel, spin brake to maximum
-			pwmWriteServo(ACCELERATOR_PWM_OUT, 2000);
 			pwmWriteServo(BRAKE_PWM_OUT, 1000);
 		}
 		else
 		{
-			// minimum accel, do not spin brake
-			pwmWriteServo(ACCELERATOR_PWM_OUT, 2000);
 			pwmWriteServo(BRAKE_PWM_OUT, 1500);
 		}
 		
+		// Accelerator (min <-> 2000, max <-> 1000)
+		pwmWriteServo(ACCELERATOR_PWM_OUT, 2000 - (rxGetChannelValue(ACCELERATOR_CH) - 1000));
+		
 		// Transmission
 		// allow hear switch only if acc < 1200
-		if (rxGetChannelValue(ACCELERATOR_BRAKE_CH) < 1200)
+		if (rxGetChannelValue(BRAKE_CH) < 1200)
 		{
 			if (higher_button_pressed && !lower_button_pressed && rxGetChannelValue(TRANSMISSION_LOWER_CH) < 1400 && rxGetChannelValue(TRANSMISSION_HIGHER_CH) < 1400)
 			{
