@@ -243,7 +243,7 @@ void regularTaskCall(timeUs_t currentTimeUs)
 		pwmWriteServo(ACCELERATOR_PWM_OUT, 2000 - (rxGetChannelValue(ACCELERATOR_CH) - 1000));
 		
 		// Transmission
-		// allow hear switch only if acc < 1200
+		// allow gear switch only if brake is pressed
 		if (rxGetChannelValue(BRAKE_CH) < 1200)
 		{
 			if (higher_button_pressed && !lower_button_pressed && rxGetChannelValue(TRANSMISSION_LOWER_CH) < 1400 && rxGetChannelValue(TRANSMISSION_HIGHER_CH) < 1400)
