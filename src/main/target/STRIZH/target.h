@@ -160,3 +160,19 @@
 #define TARGET_IO_PORTG		0xffff
 
 #define MAX_PWM_OUTPUT_PORTS	13
+
+// HMC5883L Magnetometer on I2C0
+#define MAG
+#define USE_MAG_HMC5883
+#define USE_MAG_QMC5883
+#define USE_MAG_IST8310
+#define USE_MAG_IST8308
+#define USE_MAG_MAG3110
+#define USE_MAG_LIS3MDL
+#define USE_MAG_HMC5883
+#define USE_MAG_AK8975
+
+// I2C configuration
+#define USE_I2C
+#define USE_I2C_DEVICE_0
+#define I2C_DEVICE_0 (I2CDEV_0)
